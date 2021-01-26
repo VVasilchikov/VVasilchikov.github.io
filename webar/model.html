@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Model</title>
+   <link rel="stylesheet" href="css/style.min.css">
+</head>
+
+<body>
+
+   <div class="header">
+      <div class="header__title">
+         Model
+      </div>
+      <div class="header__button">
+         <button class="button1 button" onclick="document.location='index.html'">Three.js</button>
+         <button class="button1 button" onclick="document.location='model.html'">Модели</button>
+         <button class="button1 button"  onclick="document.location='texture.html'">Текстуры</button>
+      </div>
+   </div>
+
+   <!-- <div class="basis"> -->
+   <div class="container">
+      <div class="inner">
+         <div class="container__model">
+            <!-- model-viewer -->
+            <model-viewer id="model" ar autoplay camera-controls src="models/aleb.glb">
+            </model-viewer>
+         </div>
+
+         <div class="container__settings">
+            <div class="settings__header">Настройки</div>
+            <div class="settings__body">
+               <div class="body__attr">
+                  <label for="select_src">Модель</label>
+                  <div class="attr__value">
+                     <select id="select_src" onchange="select_src()">
+                        <option value=models/aleb.glb>Алебарда</option>
+                        <option value=models/sword.glb>Меч</option>
+                        <option value=models/gear1.gltf>Шестерни</option>
+                        <option value=models/newton_balls1.gltf>Шары Ньютона</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="slider-exposure">Экспозиция</label>
+                  <div class="attr__value">
+                     <input type="range" id="slider-exposure" min="0" max="1" step="0.01" value="1" oninput=expos()>
+                     <output for="slider-exposure" id="exposure-value">1</output>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="slider-shadow-intensity">Глубина тени</label>
+                  <div class="attr__value">
+                     <input type="range" id="slider-shadow-intensity" min="0" max="1" step="0.1" value="0"
+                        oninput=shad_inten()>
+                     <output for="slider-shadow-intensity" id="shadow-intensity-value">0</output>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="slider-shadow-softness">Смягчение тени</label>
+                  <div class="attr__value">
+                     <input type="range" id="slider-shadow-softness" min="0" max="1" step="0.1" value="0"
+                        oninput=shad_soft()>
+                     <output for="slider-shadow-softness" id="shadow-softness-value">0</output>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="select">Изображение окружения</label>
+                  <div class="attr__value">
+                     <select id="select" onchange="select_menu()">
+                        <option value=0>None</option>
+                        <option value=img/birchwood_2k.hdr>Снежная</option>
+                        <option value=img/cape_hill_2k.hdr>Скалы</option>
+                        <option value=img/epping_forest_01_2k.hdr>Лес</option>
+                        <option value=img/rathaus_2k.hdr>Город</option>
+                        <option value=img/satara_night_2k.hdr>Ночь</option>
+                        <option value=img/kloppenheim_02_2k.hdr>Поле</option>
+                        <option value=img/sunflowers_2k.hdr>Поле 2</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="auto-rot">Автоматическое вращение</label>
+                  <div class="attr__value">
+                     <input type="checkbox" id="auto-rot" onclick="activate_autorot()">
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="camera-orbit-x">Вращение по оси X</label>
+                  <div class="attr__value">
+                     <input type="range" id="camera-orbit-x" min="0" max="360" step="1" value="0" oninput=cam_orb()>
+                     <output for="camera-orbit-x" id="camera-orbit-x-value">0</output>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="camera-orbit-y">Вращение по оси Y</label>
+                  <div class="attr__value">
+                     <input type="range" id="camera-orbit-y" min="0" max="160" step="1" value="90" oninput=cam_orb()>
+                     <output for="camera-orbit-y" id="camera-orbit-y-value">90</output>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="camera-orbit-dist">Расстояние камеры</label>
+                  <div class="attr__value">
+                     <input type="range" id="camera-orbit-dist" min="0" max="10" step="1" value="10" oninput=cam_orb()>
+                     <output for="camera-orbit-dist" id="camera-orbit-dist-value">10</output>
+                  </div>
+               </div>
+               <div class="body__attr">
+                  <label for="field-of-view">Поле обзора</label>
+                  <div class="attr__value">
+                     <input type="range" id="field-of-view" min="10" max="45" step="1" value="45" oninput=fov()>
+                     <output for="field-of-view" id="field-of-view-value">45</output>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="footer">
+      <div class="footer__name">
+         Васильчиков В.С | 194-722
+      </div>
+      <div class="footer__university">
+         2020 «Московский политехнический университет»
+      </div>
+   </div>
+
+   <!-- Подключение model-viewer -->
+   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+   <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="js/scripts.js"></script>
+   <!-- <script src="js/libs.min.js"></script> -->
+</body>
+
+</html>

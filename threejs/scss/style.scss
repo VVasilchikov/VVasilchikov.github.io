@@ -1,0 +1,33 @@
+@import 'libs';
+
+.button-list {
+    position: absolute;
+    left: 10px;
+    bottom: 15px;
+    z-index: 100;
+}
+
+.ui {
+    border: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 100px;
+    height: 38px;
+}
+
+.ui {
+    background-color: rgba(224, 224, 224, 0.6);
+    color: black;
+    border: 2px solid #000000;
+    margin: 0 5px;
+}
+
+.ui:hover {
+    background-color: #000000;
+    color: rgba(224, 224, 224, 0.6);
+}
