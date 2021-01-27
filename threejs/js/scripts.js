@@ -13,13 +13,15 @@ let pos;
 let turnLight_point = true;
 let turnLight_spot = false;
 let turnLight_rect = true;
+let container = new THREE.Object3D();
 
 let controller;
 
 			let reticle;
 
 			let hitTestSource = null;
-			let hitTestSourceRequested = false;
+         let hitTestSourceRequested = false;
+         let xr = false;
 
 
 function init() {
@@ -34,12 +36,12 @@ function init() {
    scene = new THREE.Scene();
 
    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-   camera.position.z = 15;
+   camera.position.z = 3;
 
    cameraControls = new OrbitControls(camera, renderer.domElement);
    cameraControls.target.set(0, 0, 0);
-   cameraControls.maxDistance = 20;
-   cameraControls.minDistance = 5;
+   cameraControls.maxDistance = 5;
+   cameraControls.minDistance = 0.3;
    cameraControls.minPolarAngle = Math.PI * 1 / 4;
    cameraControls.maxPolarAngle = Math.PI * 3 / 4;
    cameraControls.update();
@@ -54,9 +56,8 @@ function init() {
    function onSelect() {
 
       if ( reticle.visible ) {
-
-         createObject();
-
+         container.visible = true;
+         container.position.setFromMatrixPosition( reticle.matrix );     
       }
 
    }
@@ -66,12 +67,11 @@ function init() {
    scene.add( controller );
 
    reticle = new THREE.Mesh(
-      new THREE.RingBufferGeometry( 0.15, 0.2, 32 ).rotateX( - Math.PI / 2 ),
+      new THREE.RingBufferGeometry( 0.3, 1, 4 ),
       new THREE.MeshBasicMaterial()
    );
    reticle.matrixAutoUpdate = false;
    reticle.visible = false;
-   scene.add( reticle );
 
    //
 
@@ -247,10 +247,11 @@ function createObject() {
                }
             }
          });
-         object.position.set(0, 2, 0);
-         object.scale.set(5, 5, 5);
+         object.position.set(0, 0, 0);
+         object.scale.set(1, 1, 1);
          object.name = "Room";
-         scene.add(object);
+         container.add(object);
+         // scene.add(object);
       });
    });
 
@@ -270,9 +271,10 @@ function createObject() {
                color: 0x889999
             });
             Mirror.rotation.x = -8.644 * Math.PI / 180;
-            Mirror.position.set(pos.x * 5, pos.y - 0.75, pos.z * 5);
-            Mirror.scale.set(5, 5, 5);
-            scene.add(Mirror);
+            Mirror.position.set(pos.x, pos.y, pos.z);
+            Mirror.scale.set(1, 1, 1);
+            container.add(Mirror);
+            // scene.add(Mirror);
          }
       });
    });
@@ -281,53 +283,70 @@ function createObject() {
       //point light
    let color = 0xFFFFFF;
    let intensity = 0.4;
-   let bulbGeometry = new THREE.SphereBufferGeometry(0.1, 16, 8);
+   let bulbGeometry = new THREE.SphereBufferGeometry(0.02, 16, 8);
    let bulbMat = new THREE.MeshStandardMaterial({
       emissive: 0xffffee,
       emissiveIntensity: 1,
       color: 0x000000
    });
    let light = new THREE.PointLight(color, intensity);
-   light.position.set(0, 1.5, -1.08);
+   light.position.set(0, -0.1, -0.216);
    light.castShadow = true;
    light.shadowMapWidth = 512;
    light.shadowMapHeight = 512;
    light.name = "point_light";
    light.add(new THREE.Mesh(bulbGeometry, bulbMat));
-   scene.add(light);
+   // scene.add(light);
+   container.add(light);
+
+   // var boxGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+   // var basicMaterial = new THREE.MeshBasicMaterial({color: 0x0095DD});
+   // var cube = new THREE.Mesh(boxGeometry, basicMaterial);
+   // cube.position.set(0.3, -0.98, 0);
+   // scene.add(cube);
+
 
       //spot light
    let spot_intensity = 1;
-   let spot_light = new THREE.SpotLight(color, spot_intensity, 12);
-   spot_light.position.set(-4.15, -0.28, -3.8);
-   spot_light.target.position.set(1.5, -2.8, 0);
+   let spot_light = new THREE.SpotLight(color, spot_intensity, 4);
+   spot_light.position.set(-0.83, -0.45, -0.76);
+   spot_light.target.position.set(0.3, -0.98, 0);
    spot_light.penumbra = 1;
-   spot_light.angle = 0.8;
+   spot_light.angle = 0.6;
    spot_light.name = "spot_light";
    spot_light.castShadow = true;
    spot_light.shadowMapWidth = 512;
    spot_light.shadowMapHeight = 512;
    spot_light.visible = false;
-   scene.add(spot_light);
-   scene.add(spot_light.target);
+   container.add(spot_light);
+   container.add(spot_light.target);
+   // scene.add(spot_light);
+   // scene.add(spot_light.target);
+
+//    const helper = new THREE.SpotLightHelper(spot_light);
+// scene.add(helper);
    
       //rect light
    RectAreaLightUniformsLib.init();
    let rectLight_intensity = 1;
-   rectLight_1 = new THREE.RectAreaLight(color, rectLight_intensity, 3, 2);
-   rectLight_1.position.set(0, 0.2, 2.9);
+   rectLight_1 = new THREE.RectAreaLight(color, rectLight_intensity, 0.6, 0.4);
+   rectLight_1.position.set(0, -0.365, 0.58);
    rectLight_1.name = "rect1_light";
-   scene.add(rectLight_1);
+   // scene.add(rectLight_1);
+   container.add(rectLight_1);
    rectLight_1Helper = new RectAreaLightHelper(rectLight_1);
    rectLight_1.add(rectLight_1Helper);
 
-   rectLight_2 = new THREE.RectAreaLight(color, rectLight_intensity, 2.5, 4);
-   rectLight_2.position.set(5, -0.68, 0.1);
+   rectLight_2 = new THREE.RectAreaLight(color, rectLight_intensity, 0.5, 0.8);
+   rectLight_2.position.set(1, -0.57, 0.025);
    rectLight_2.rotation.y = THREE.MathUtils.degToRad(90);
    rectLight_2.name = "rect2_light";
-   scene.add(rectLight_2);
+   container.add(rectLight_2);
+   // scene.add(rectLight_2);
    rectLight_2Helper = new RectAreaLightHelper(rectLight_2);
    rectLight_2.add(rectLight_2Helper);
+
+   scene.add(container);
 }
 
 function update(timestamp, frame) {
@@ -367,8 +386,9 @@ function update(timestamp, frame) {
          if ( hitTestResults.length ) {
 
             const hit = hitTestResults[ 0 ];
-
+            scene.add( reticle );
             reticle.visible = true;
+            container.visible = false;
             reticle.matrix.fromArray( hit.getPose( referenceSpace ).transform.matrix );
 
          } else {
@@ -380,7 +400,6 @@ function update(timestamp, frame) {
       }
 
    }
-
 
    renderer.render(scene, camera);
 
