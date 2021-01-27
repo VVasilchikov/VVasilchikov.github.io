@@ -68,7 +68,7 @@ function init() {
    scene.add( controller );
 
    reticle = new THREE.Mesh(
-      new THREE.RingBufferGeometry( 0.3, 0.2, 4 ),
+      new THREE.RingBufferGeometry( 0.1, 0.2, 4 ).rotateX( - Math.PI / 2 ),
       new THREE.MeshBasicMaterial()
    );
    reticle.matrixAutoUpdate = false;
@@ -354,12 +354,11 @@ function createObject() {
 function update(timestamp, frame) {
    //requestAnimationFrame(update);
    if ( frame ) {
-      container.visible = false;
       const referenceSpace = renderer.xr.getReferenceSpace();
       const session = renderer.xr.getSession();
 
       if ( hitTestSourceRequested === false ) {
-
+         container.visible = false;
          session.requestReferenceSpace( 'viewer' ).then( function ( referenceSpace ) {
 
             session.requestHitTestSource( { space: referenceSpace } ).then( function ( source ) {
