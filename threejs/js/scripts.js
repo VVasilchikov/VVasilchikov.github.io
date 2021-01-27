@@ -57,6 +57,7 @@ function init() {
 
       if ( reticle.visible ) {
          container.visible = true;
+         container.scale.set(0.5,0.5,0.5);
          container.position.setFromMatrixPosition( reticle.matrix );     
       }
 
@@ -352,7 +353,7 @@ function createObject() {
 function update(timestamp, frame) {
    //requestAnimationFrame(update);
    if ( frame ) {
-      console.log("111");
+      container.visible = false;
       const referenceSpace = renderer.xr.getReferenceSpace();
       const session = renderer.xr.getSession();
 
@@ -388,6 +389,7 @@ function update(timestamp, frame) {
             const hit = hitTestResults[ 0 ];
             scene.add( reticle );
             reticle.visible = true;
+            
             reticle.matrix.fromArray( hit.getPose( referenceSpace ).transform.matrix );
 
          } else {
@@ -398,6 +400,12 @@ function update(timestamp, frame) {
 
       }
 
+   }
+   else
+   {
+      container.visible = true;
+      container.scale.set(1,1,1);
+      reticle.visible = false;
    }
 
    renderer.render(scene, camera);
