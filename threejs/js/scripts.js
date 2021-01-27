@@ -352,7 +352,7 @@ function createObject() {
 function update(timestamp, frame) {
    //requestAnimationFrame(update);
    if ( frame ) {
-
+      console.log("111");
       const referenceSpace = renderer.xr.getReferenceSpace();
       const session = renderer.xr.getSession();
 
@@ -388,7 +388,6 @@ function update(timestamp, frame) {
             const hit = hitTestResults[ 0 ];
             scene.add( reticle );
             reticle.visible = true;
-            container.visible = false;
             reticle.matrix.fromArray( hit.getPose( referenceSpace ).transform.matrix );
 
          } else {
