@@ -56,8 +56,8 @@ function init() {
    function onSelect() {
 
       if ( reticle.visible ) {
+         container.scale.set(0.2,0.2,0.2);
          container.visible = true;
-         container.scale.set(0.5,0.5,0.5);
          container.position.setFromMatrixPosition( reticle.matrix );     
       }
 
@@ -68,11 +68,12 @@ function init() {
    scene.add( controller );
 
    reticle = new THREE.Mesh(
-      new THREE.RingBufferGeometry( 0.3, 1, 4 ),
+      new THREE.RingBufferGeometry( 0.3, 0.2, 4 ),
       new THREE.MeshBasicMaterial()
    );
    reticle.matrixAutoUpdate = false;
    reticle.visible = false;
+   scene.add( reticle );
 
    //
 
@@ -387,7 +388,6 @@ function update(timestamp, frame) {
          if ( hitTestResults.length ) {
 
             const hit = hitTestResults[ 0 ];
-            scene.add( reticle );
             reticle.visible = true;
             
             reticle.matrix.fromArray( hit.getPose( referenceSpace ).transform.matrix );
@@ -405,6 +405,7 @@ function update(timestamp, frame) {
    {
       container.visible = true;
       container.scale.set(1,1,1);
+      container.position.set(0,0,0);
       reticle.visible = false;
    }
 
